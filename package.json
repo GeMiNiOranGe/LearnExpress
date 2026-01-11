@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node --watch index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -13,9 +14,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/GeMiNiOranGe/LearnExpress/issues"
   },
-  "homepage": "https://github.com/GeMiNiOranGe/LearnExpress#readme"
+  "homepage": "https://github.com/GeMiNiOranGe/LearnExpress#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
 }
