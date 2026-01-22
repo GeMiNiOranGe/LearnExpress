@@ -1,13 +1,13 @@
 import express from "express";
+import config from "@/config";
 
 const app = express();
-const port = 3000;
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
 // Start server
-app.listen(port, () => {
-  process.stdout.write(`Server listening at http://localhost:${port}\n`);
+app.listen(config.port, () => {
+  process.stdout.write(`Server listening at http://localhost:${config.port}\n`);
 });
