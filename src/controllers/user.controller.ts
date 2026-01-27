@@ -1,6 +1,10 @@
 import type { RequestHandler } from "express";
 import createHttpError from "http-errors";
 
+const getMany: RequestHandler = (req, res, _next) => {
+  res.send("Hello users");
+};
+
 const getById: RequestHandler = (req, res, next) => {
   const id = Number(req.params.id);
 
@@ -12,4 +16,4 @@ const getById: RequestHandler = (req, res, next) => {
   res.send(`Hello user with id ${id}`);
 };
 
-export default { getById };
+export default { getMany, getById };

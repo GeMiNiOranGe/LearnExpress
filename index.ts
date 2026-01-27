@@ -10,7 +10,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.use("/users", UserRouter);
+app.use("/user", UserRouter);
 
 // 404 handler
 app.use(notFoundHandler);
