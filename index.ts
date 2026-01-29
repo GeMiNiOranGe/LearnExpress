@@ -1,11 +1,16 @@
 import express from "express";
 
 import config from "@/config";
-import { errorRequestHandler, notFoundHandler } from "@/middlewares";
+import {
+  errorRequestHandler,
+  httpLogger,
+  notFoundHandler,
+} from "@/middlewares";
 import { UserRouter } from "@/routes";
 
 const app = express();
 
+app.use(httpLogger);
 app.use(express.json());
 
 app.get("/", (req, res) => {
