@@ -4,22 +4,33 @@ import config from "@/config";
 import pkg from "package.json";
 
 /**
- * Ping endpoint handler
- * - Dùng để kiểm tra process còn sống hay không
- * - Không có body
- * - Không side-effect
- * - Trả về HTTP 200 nếu service đang chạy
+ * Liveness probe endpoint.
+ *
+ * Purpose:
+ * - Verifies that the Node.js process is running
+ * - Used by load balancers, uptime monitors, or orchestration platforms
+ *
+ * Characteristics:
+ * - No request body
+ * - No side effects
+ * - Always returns HTTP 200 if the process is alive
  */
-const getPing: RequestHandler = (req, res, _next) => {
+const handlePing: RequestHandler = (req, res, _next) => {
   res.sendStatus(200);
 };
 
 /**
- * Health check handler
- * - Hiện tại: chỉ phản hồi OK
- * - Tương lai: có thể mở rộng check DB / cache / external services
+ * Health check endpoint.
+ *
+ * Purpose:
+ * - Indicates the overall health of the service
+ * - Can be extended in the future to check dependencies
+ *   (database, cache, external APIs, etc.)
+ *
+ * Response:
+ * - JSON payload with basic runtime information
  */
-const getHealthCheck: RequestHandler = (req, res, _next) => {
+const handleHealthCheck: RequestHandler = (req, res, _next) => {
   res.status(200).json({
     status: "ok",
     timestamp: new Date().toISOString(),
@@ -28,12 +39,18 @@ const getHealthCheck: RequestHandler = (req, res, _next) => {
 };
 
 /**
- * Readiness check handler
- * - Dùng cho load balancer / Kubernetes readiness probe
- * - Có thể khác logic với /health trong tương lai
+ * Readiness probe endpoint.
+ *
+ * Purpose:
+ * - Indicates whether the service is ready to receive traffic
+ * - Commonly used by Kubernetes readiness probes
+ *
+ * Notes:
+ * - Logic may differ from the health check
+ * - Should return HTTP 503 if the service is not ready
  */
-const getReadinessCheck: RequestHandler = (req, res, _next) => {
-  // implement your readiness logic here
+const handleReadinessCheck: RequestHandler = (req, res, _next) => {
+  // TODO: implement real readiness checks (DB, cache, etc.)
   const ready = true;
 
   if (!ready) {
@@ -44,7 +61,14 @@ const getReadinessCheck: RequestHandler = (req, res, _next) => {
   res.sendStatus(200);
 };
 
-const getInfo: RequestHandler = (req, res, _next) => {
+/**
+ * Service metadata endpoint.
+ *
+ * Purpose:
+ * - Exposes static and runtime information about the service
+ * - Useful for debugging and operational visibility
+ */
+const handleServiceInfo: RequestHandler = (req, res, _next) => {
   res.status(200).json({
     name: pkg.name,
     version: pkg.version,
@@ -56,19 +80,29 @@ const getInfo: RequestHandler = (req, res, _next) => {
   });
 };
 
-const getVersion: RequestHandler = (req, res, _next) => {
+/**
+ * Build information endpoint.
+ *
+ * Purpose:
+ * - Exposes build-time metadata injected by CI/CD pipelines
+ * - Helps identify the exact version running in production
+ *
+ * Notes:
+ * - Environment variables are expected to be injected at build time
+ */
+const handleBuildInfo: RequestHandler = (req, res, _next) => {
   // CI inject env variables during build time
   res.status(200).json({
-    version: process.env.APP_VERSION ?? "unknown",
-    commit: process.env.GIT_COMMIT ?? "unknown",
-    buildTime: process.env.BUILD_TIME ?? "unknown",
+    version: pkg.version,
+    commit: config.gitCommit,
+    buildTime: config.buildTime,
   });
 };
 
 export default {
-  getPing,
-  getHealthCheck,
-  getReadinessCheck,
-  getInfo,
-  getVersion,
+  handlePing,
+  handleHealthCheck,
+  handleReadinessCheck,
+  handleServiceInfo,
+  handleBuildInfo,
 };

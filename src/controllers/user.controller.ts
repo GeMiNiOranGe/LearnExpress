@@ -1,11 +1,33 @@
 import type { RequestHandler } from "express";
 import createHttpError from "http-errors";
 
-const getMany: RequestHandler = (req, res, _next) => {
+/**
+ * Get users endpoint.
+ *
+ * Purpose:
+ * - Returns a list of users
+ *
+ * Notes:
+ * - Currently returns a placeholder response
+ * - Will be replaced with real data fetching logic
+ */
+const handleGetMany: RequestHandler = (_req, res) => {
   res.send("Hello users");
 };
 
-const getById: RequestHandler = (req, res, next) => {
+/**
+ * Get user by ID endpoint.
+ *
+ * Purpose:
+ * - Retrieves a single user by its identifier
+ *
+ * Validation:
+ * - Ensures the `id` route parameter is a valid number
+ *
+ * Errors:
+ * - Returns HTTP 400 if the provided id is not numeric
+ */
+const handleGetById: RequestHandler = (req, res, next) => {
   const id = Number(req.params.id);
 
   if (Number.isNaN(id)) {
@@ -16,4 +38,7 @@ const getById: RequestHandler = (req, res, next) => {
   res.send(`Hello user with id ${id}`);
 };
 
-export default { getMany, getById };
+export default {
+  handleGetMany,
+  handleGetById,
+};

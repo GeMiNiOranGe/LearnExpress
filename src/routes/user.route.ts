@@ -4,7 +4,7 @@ import { UserController } from "@/controllers";
 
 const router = express.Router();
 
-router.get("/", UserController.getMany);
-router.get("/:id", UserController.getById);
+router.get("/", UserController.handleGetMany);
+router.get("/:id", UserController.handleGetById);
 
 export default router;
