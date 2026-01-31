@@ -5,7 +5,7 @@ import {
   httpLogger,
   notFoundHandler,
 } from "@/middlewares";
-import { UserRouter } from "@/routes";
+import { SystemInfoRouter, UserRouter } from "@/routes";
 
 const app = express();
 
@@ -16,6 +16,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+app.use(SystemInfoRouter);
 app.use("/user", UserRouter);
 
 // 404 handler
