@@ -2,6 +2,11 @@ import type { RequestHandler } from "express";
 
 import config from "@/config";
 import pkg from "package.json";
+import type {
+  BuildInfoResponse,
+  HealthCheckResponse,
+  ServiceInfoResponse,
+} from "@/types";
 
 /**
  * Liveness probe endpoint.
@@ -30,7 +35,11 @@ const handlePing: RequestHandler = (req, res, _next) => {
  * Response:
  * - JSON payload with basic runtime information
  */
-const handleHealthCheck: RequestHandler = (req, res, _next) => {
+const handleHealthCheck: RequestHandler<"", HealthCheckResponse> = (
+  req,
+  res,
+  _next,
+) => {
   res.status(200).json({
     status: "ok",
     timestamp: new Date().toISOString(),
@@ -68,7 +77,11 @@ const handleReadinessCheck: RequestHandler = (req, res, _next) => {
  * - Exposes static and runtime information about the service
  * - Useful for debugging and operational visibility
  */
-const handleServiceInfo: RequestHandler = (req, res, _next) => {
+const handleServiceInfo: RequestHandler<"", ServiceInfoResponse> = (
+  req,
+  res,
+  _next,
+) => {
   res.status(200).json({
     name: pkg.name,
     version: pkg.version,
@@ -90,7 +103,11 @@ const handleServiceInfo: RequestHandler = (req, res, _next) => {
  * Notes:
  * - Environment variables are expected to be injected at build time
  */
-const handleBuildInfo: RequestHandler = (req, res, _next) => {
+const handleBuildInfo: RequestHandler<"", BuildInfoResponse> = (
+  req,
+  res,
+  _next,
+) => {
   // CI inject env variables during build time
   res.status(200).json({
     version: pkg.version,

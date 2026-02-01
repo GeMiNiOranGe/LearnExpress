@@ -2,8 +2,9 @@ import type { ErrorRequestHandler } from "express";
 import type { HttpError } from "http-errors";
 
 import { isDevEnv } from "@/utilities";
+import type { ErrorResponse } from "@/types";
 
-const errorRequestHandler: ErrorRequestHandler = (
+const errorRequestHandler: ErrorRequestHandler<"", ErrorResponse> = (
   err: HttpError,
   req,
   res,

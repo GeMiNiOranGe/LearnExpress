@@ -1,6 +1,12 @@
 import type { RequestHandler } from "express";
 import createHttpError from "http-errors";
 
+import type {
+  GetUserByIdParams,
+  GetUserByIdResponse,
+  GetUsersResponse,
+} from "@/types";
+
 /**
  * Get users endpoint.
  *
@@ -11,7 +17,7 @@ import createHttpError from "http-errors";
  * - Currently returns a placeholder response
  * - Will be replaced with real data fetching logic
  */
-const handleGetMany: RequestHandler = (_req, res) => {
+const handleGetMany: RequestHandler<"", GetUsersResponse> = (_req, res) => {
   res.send("Hello users");
 };
 
@@ -27,7 +33,11 @@ const handleGetMany: RequestHandler = (_req, res) => {
  * Errors:
  * - Returns HTTP 400 if the provided id is not numeric
  */
-const handleGetById: RequestHandler = (req, res, next) => {
+const handleGetById: RequestHandler<GetUserByIdParams, GetUserByIdResponse> = (
+  req,
+  res,
+  next,
+) => {
   const id = Number(req.params.id);
 
   if (Number.isNaN(id)) {
